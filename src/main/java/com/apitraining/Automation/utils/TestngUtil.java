@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,9 +31,11 @@ public class TestngUtil {
 	public Object jsonbody;
 	public JSONObject input;
 	public String requestcall = ProjectbasedConstantPaths.requestcall;
+	public final static Logger LOGGER = LogManager.getLogger(TestngUtil.class);
 	
 	@BeforeSuite
 	public void beforeSuite() {
+		LOGGER.info("Started executing before suite");
 		prop = new Properties();
 		try {
 			path = new FileInputStream(
@@ -46,10 +50,12 @@ public class TestngUtil {
 		}
 		RestAssured.baseURI = prop.getProperty("BaseURL");
 		System.out.println(prop.getProperty("BaseURL"));
+		LOGGER.info("Before Suite Executed Successfully");
 	}
 	
 	@BeforeTest
 	public void beforeTest(){
+		LOGGER.info("Started executing before test");
 		JSONParser data = new JSONParser();
 		try {
 			jsondata = new FileReader(ProjectbasedConstantPaths.JSON_DATA);
@@ -66,9 +72,11 @@ public class TestngUtil {
         input = (JSONObject) jsonbody;
 		request = RestAssured.given().auth().basic(prop.getProperty("username"), prop.getProperty("password")).body(input.toJSONString());
 		System.out.println(request);
+		LOGGER.info("Before test executed successfully");
 	}
 	
 	public void test() {
+		LOGGER.info("Started executing " + ProjectbasedConstantPaths.requestcall + " method");
 		if(requestcall.equals("Get")) {
 			response = request.when().get("/users/1").then().log()
 					.all().extract().response();
@@ -97,10 +105,12 @@ public class TestngUtil {
 	 		response = request.when().delete(RestAssured.basePath + "/1").then().log().all().extract().response();
 	 		System.out.println(response);
 		}
+		LOGGER.info("Successfully executed " + ProjectbasedConstantPaths.requestcall + " method");
 	}
 
 	@AfterTest
 	public void afterTest() {
+		LOGGER.info("Started validating" + ProjectbasedConstantPaths.requestcall + "validations");
 		if(requestcall.equals("Get")) {
 			Assert.assertEquals(response.getStatusLine(), "HTTP/1.1 200 OK" , "Validated Success");
 			System.out.println("Response is successfully validated");
@@ -121,12 +131,13 @@ public class TestngUtil {
 			Assert.assertEquals(response.getStatusLine(), "HTTP/1.1 204 No Content", "Validated Success");
 			System.out.println("Response is successfully validated");
 		}
+		LOGGER.info("Successfully validated" + ProjectbasedConstantPaths.requestcall + "validations");
 		
 	}
 
 	@AfterSuite
 	public void afterSuite() {
-		System.out.println("Suite executed successfully");
+		LOGGER.info("Suite executed successfully");
 	}
 
 }
