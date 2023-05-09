@@ -19,6 +19,7 @@ import org.testng.annotations.BeforeTest;
 
 
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -32,6 +33,7 @@ public class TestngUtil {
 	public JSONObject input;
 	public String requestcall = ProjectbasedConstantPaths.requestcall;
 	public final static Logger LOGGER = LogManager.getLogger(TestngUtil.class);
+	//public JsonPath jsnPath = response.jsonPath();;
 	
 	@BeforeSuite
 	public void beforeSuite() {
@@ -78,10 +80,10 @@ public class TestngUtil {
 	public void test() {
 		LOGGER.info("Started executing " + ProjectbasedConstantPaths.requestcall + " method");
 		if(requestcall.equals("Get")) {
-			response = request.when().get("/users/1").then().log()
+			response = request.get("/users").then().log()
 					.all().extract().response();
 			System.out.println(response);
-		}
+			}
 		else if (requestcall.equals("Post")) {
 			RestAssured.basePath = prop.getProperty("basepath");
 			response = request.when().put(RestAssured.basePath+"/1").then().log()
@@ -113,6 +115,7 @@ public class TestngUtil {
 		LOGGER.info("Started validating" + ProjectbasedConstantPaths.requestcall + "validations");
 		if(requestcall.equals("Get")) {
 			Assert.assertEquals(response.getStatusLine(), "HTTP/1.1 200 OK" , "Validated Success");
+			Assert.assertEquals(response.getStatusCode(), "200" , "Validated Success");
 			System.out.println("Response is successfully validated");
 		}
 		else if (requestcall.equals("Post")) {
