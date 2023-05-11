@@ -9,4 +9,5 @@ public class ProjectbasedConstantPaths {
     public final static String JSON_DATA = USER_HOME + File.separator + "src/main/resources"+ File.separator + "properties"
             + File.separator + "testdata.json";
     public final static String requestcall= "Get"; 
+    public final static String title = "Apple";
 }
