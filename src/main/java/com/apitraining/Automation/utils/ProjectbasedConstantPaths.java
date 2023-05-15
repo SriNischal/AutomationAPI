@@ -8,6 +8,7 @@ public class ProjectbasedConstantPaths {
             + File.separator + "config.properties";
     public final static String JSON_DATA = USER_HOME + File.separator + "src/main/resources"+ File.separator + "properties"
             + File.separator + "testdata.json";
-    public final static String requestcall= "Get"; 
+    public final static String[] requestcall= {"Post","Get"}; 
     public final static String title = "Apple";
+    public final static String pattern = "([a-zA-Z0-9.*@]+)";
 }

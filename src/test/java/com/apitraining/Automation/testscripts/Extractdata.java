@@ -7,7 +7,10 @@ import static org.testng.Assert.assertEquals;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,12 +32,20 @@ public class Extractdata {
 	public FileInputStream path;
 
 	@Test
-	public void testGetdetails() throws Exception {
-		pattern = Pattern.compile("^([a-zA-Z]+)");
+	public void testGetdetails() {
+		pattern = Pattern.compile(ProjectbasedConstantPaths.pattern);
 		prop = new Properties();  
-		path = new FileInputStream(
-				ProjectbasedConstantPaths.TEST_DATA);
-		prop.load(path);
+		try {
+			path = new FileInputStream(
+					ProjectbasedConstantPaths.TEST_DATA);
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found exception");
+		}
+		try {
+			prop.load(path);
+		} catch (IOException e) {
+			System.out.println("Path is not valid");
+		}
 		Response response = RestAssured.given().get(prop.getProperty("url"));
 		System.out.println(response.getBody().asString());
 		JsonPath js = response.jsonPath();
@@ -48,6 +59,7 @@ public class Extractdata {
 		}
 		for (int i = 0; i < list.size(); i++) {
 			if ((js.get("products.brand[" + i + "]")).equals(matcher.group(0))) {
+				assertThat("Validating the matcher element", matcher.group(0), is("Apple"));
 				System.out.println("the mobile title==>" + js.get("products.title[" + i + "]"));
 				System.out.println("the mobile price==>" + js.get("products.price[" + i + "]"));
 				System.out.println("the mobile stock==>" + js.get("products.stock[" + i + "]"));
