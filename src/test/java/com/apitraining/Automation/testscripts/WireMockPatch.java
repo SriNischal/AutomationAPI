@@ -51,7 +51,7 @@ public class WireMockPatch {
 
     @Test
     public void put() throws URISyntaxException {
-        Response response = RestAssured.given().baseUri("http://localhost:8080").body(input.toString())
+        Response response = RestAssured.given().baseUri("http://localhost:8080").auth().basic("nischal", "nischal").body(input.toString())
                 .accept(ContentType.JSON).when().patch("/api/wiremockapi/partialupdate").then().assertThat().statusCode(200).and()
                 .body("employee_name", Matchers.equalTo("nischal")).extract().response();
         System.out.println(response.getBody().asString());

@@ -26,7 +26,7 @@ public class WireMockDelete {
     }
     @Test
     public void delete() throws URISyntaxException {
-        Response response = RestAssured.given().baseUri("http://localhost:8080").accept(ContentType.JSON).when()
+        Response response = RestAssured.given().baseUri("http://localhost:8080").auth().basic("nischal", "nischal").accept(ContentType.JSON).when()
                 .delete("/api/wiremockapi/delete/1").then().assertThat().statusCode(200).and().log().all().extract()
                 .response();
         System.out.println(response.getBody().asString());
