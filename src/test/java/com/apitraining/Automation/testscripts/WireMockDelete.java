@@ -22,7 +22,7 @@ public class WireMockDelete {
         ResponseDefinitionBuilder mockResponse = new ResponseDefinitionBuilder();
         mockResponse.withStatus(200).withHeader("Content-Type", "application/json");
         WireMock.configureFor(HOST, PORT); // http://localhost:8080
-        WireMock.stubFor(WireMock.delete("/api/wiremockapi/delete/1").willReturn(mockResponse));
+        WireMock.stubFor(WireMock.delete("/api/wiremockapi").willReturn(mockResponse));
     }
     @Test
     public void delete() throws URISyntaxException {

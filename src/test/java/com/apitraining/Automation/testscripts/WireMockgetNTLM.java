@@ -11,12 +11,14 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 
-public class WireMockGet {
+public class WireMockgetNTLM {
 
     private static final int PORT = 8080;
     private static final String HOST = "localhost";
@@ -33,9 +35,12 @@ public class WireMockGet {
 
     @Test
     public void get() throws URISyntaxException {
-        String keyvalue = "X-Api-Key:your_api_key_here";
+    	String username = "Sri Nischal";
+    	String password = "Nischal123";
+    	String domain = "Domain345";
+    	String workstation = "workstation456";
 
-        Response response = RestAssured.given().baseUri("http://localhost:8080").header("Authentication", keyvalue)
+        Response response = RestAssured.given().baseUri("http://localhost:8080").header("Authentication", "application/json").auth().ntlm(username, password, domain, workstation)
                 .accept(ContentType.JSON).when().get("/api/wiremockapi").then().assertThat().statusCode(200).and()
                 //.body("employee_name", Matchers.equalTo("SriNischal"))
                 .log().all().extract().response();

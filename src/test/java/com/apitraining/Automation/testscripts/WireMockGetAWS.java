@@ -11,12 +11,14 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 
-public class WireMockGet {
+public class WireMockGetAWS {
 
     private static final int PORT = 8080;
     private static final String HOST = "localhost";
@@ -33,9 +35,15 @@ public class WireMockGet {
 
     @Test
     public void get() throws URISyntaxException {
-        String keyvalue = "X-Api-Key:your_api_key_here";
+        String accesskey = "UJHIUHNDKJDFOWUIFNDOWEI";
+        String secretkey = "LKKNDFKWENJFOWINOIEFNOWINEK";
+        Map<String, String> header = new HashMap();
+        String[] headers = { accesskey, secretkey };
+        for (String headerValue : headers) {
+            header.put("Authorization", headerValue);
+        }
 
-        Response response = RestAssured.given().baseUri("http://localhost:8080").header("Authentication", keyvalue)
+        Response response = RestAssured.given().baseUri("http://localhost:8080").header("Authentication", "application/json").headers(header)
                 .accept(ContentType.JSON).when().get("/api/wiremockapi").then().assertThat().statusCode(200).and()
                 //.body("employee_name", Matchers.equalTo("SriNischal"))
                 .log().all().extract().response();
